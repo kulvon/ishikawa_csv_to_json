@@ -36,11 +36,11 @@ const openDataSource = [
     url:
       'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_call_center.csv'
   },
-  {
-    name: 'discharge',
-    url:
-      'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_discharge.csv'
-  },
+  // {
+  //   name: 'discharge',
+  //   url:
+  //     'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_discharge.csv'
+  // },
   {
     name: 'patients',
     url:
@@ -267,8 +267,8 @@ function inspectionSummary(json, jsonObject) {
     x.患者_状態 === '軽症' || x.患者_状態 === '中等症' || x.患者_状態 === ''
   const severeOrSerious = x => x.患者_状態 === '重症' || x.患者_状態 === '重篤'
   const dead = x => x.患者_状態 === '死亡'
-  const discharge = x =>
-    parseInt(x.患者_退院済フラグ) === 1 && x.患者_状態 !== '死亡'
+  // const discharge = x =>
+  //   parseInt(x.患者_退院済フラグ) === 1 && x.患者_状態 !== '死亡'
   jsonObject.children = [
     {
       attr: '陽性患者数',
@@ -298,10 +298,10 @@ function inspectionSummary(json, jsonObject) {
           attr: '死亡',
           value: patient.where(dead).count()
         },
-        {
-          attr: '退院',
-          value: patient.where(discharge).count()
-        },
+        // {
+        //   attr: '退院',
+        //   value: patient.where(discharge).count()
+        // },
         {
           attr: '自宅療養',
           value: '不明'
