@@ -1,8 +1,8 @@
 {
     "date": "2020/04/15 07:26",
     "data": {
-        "used": 90,
-        "unused": 10
+        "used": 70,
+        "unused": 30
     },
     "labels": [
         "現在患者数",
