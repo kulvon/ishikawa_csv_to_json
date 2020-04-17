@@ -28,3 +28,8 @@ jobs:
           git config --local user.email "avocado0501@gmail.com"
           git config --local user.name "kulvon BOT"
           git status | grep modified && git add data && git commit -v -m "[Bot] GitHub Actions - auto run"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
