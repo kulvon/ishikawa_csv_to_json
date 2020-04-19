@@ -88,7 +88,6 @@ const files = {
   // japanNews: 'japan_news.json', // 国内のお知らせ
   // fukuiShimbun: 'fukuishimbun.json', // 福井新聞のニュース
   contacts: 'contacts.json', // コールセンター相談件数
-  hospitalBeds: 'hospital_beds.json', // 感染症病床使用率
   inspectionPersons: '170003_ishikawa_covid19_test_count.json', // 検査実施人数
   inspectionSummary: 'inspection_summary.json', // 検査陽性者の状況
   patientsSummary: 'patients_summary.json', // 陽性患者数
@@ -121,7 +120,6 @@ const main = async () => {
   
   // 各JSONを作成
   const contactsJson = Object.assign({}, jsonObjectBase)
-  const hospitalBedsJson = Object.assign({}, jsonObjectBase)
   const inspectionPersonsJson = Object.assign({}, jsonObjectBase)
   const inspectionSummaryJson = Object.assign({}, jsonObjectBase)
   const patientsJson = Object.assign({}, jsonObjectBase)
@@ -133,10 +131,6 @@ const main = async () => {
   const linq = Enumerable.from(openDataSource)
   // 各JSONの処理
   contacts(linq.where(x => x.name === 'call_center').first().json, contactsJson)
-  hospitalBeds(
-    linq.where(x => x.name === 'patients').first().json,
-    hospitalBedsJson
-  )
   inspectionPersons(
     linq.where(x => x.name === 'test_count').first().json,
     inspectionPersonsJson
@@ -164,7 +158,6 @@ const main = async () => {
   // writeFile(fukuiNewsJson, files.fukuiNews)
   // writeFile(japanNewsJson, files.japanNews)
   writeFile(contactsJson, files.contacts)
-  writeFile(hospitalBedsJson, files.hospitalBeds)
   writeFile(inspectionPersonsJson, files.inspectionPersons)
   writeFile(inspectionSummaryJson, files.inspectionSummary)
   writeFile(patientsJson, files.patients)
@@ -242,24 +235,6 @@ function contacts(json, jsonObject) {
       }
     })
     .toArray()
-}
-
-/**
- * 病床数をJSONにします
- * 全体のベッド数は環境変数`HOSPITAL_BEDS`から取得します
- * @param {Object} json 元の情報があるJSONオブジェクト
- * @param {Object} jsonObject 書き出すJSONオブジェクト
- */
-function hospitalBeds(json, jsonObject) {
-  const patient = Enumerable.from(json)
-  const hospitalized = x =>
-    x.患者_状態 !== '死亡' && parseInt(x.患者_退院済フラグ) !== 1
-  const usedNum = patient.where(hospitalized).count()
-  jsonObject.data = {
-    used: usedNum,
-    unused: HospitalBedNum - usedNum
-  }
-  jsonObject.labels = ['現在患者数', '空き病床数(推定)']
 }
 
 /**
