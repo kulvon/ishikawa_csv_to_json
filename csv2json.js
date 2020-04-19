@@ -34,32 +34,32 @@ const openDataSource = [
   {
     name: 'call_center',
     url:
-      'http://web.check-data.work/covid/170003_ishikawa_covid19_call_center.csv'
+      'https://web.check-data.work/covid/170003_ishikawa_covid19_call_center.csv'
   },
   {
     name: 'patients',
     url:
-      'http://web.check-data.work/covid/170003_ishikawa_covid19_patients.csv'
+      'https://web.check-data.work/covid/170003_ishikawa_covid19_patients.csv'
   },
   {
     name: 'test_count',
     url:
-      'http://web.check-data.work/covid/170003_ishikawa_covid19_test_count.csv'
+      'https://web.check-data.work/covid/170003_ishikawa_covid19_test_count.csv'
   },
   {
     name: 'city_patients',
     url:
-      'http://web.check-data.work/covid/170003_ishikawa_covid19_city_town_patients.csv'
+      'https://web.check-data.work/covid/170003_ishikawa_covid19_city_town_patients.csv'
   },
   {
     name: 'general_consultation',
     url:
-      'http://web.check-data.work/covid/170003_ishikawa_covid19_counter.csv'
+      'https://web.check-data.work/covid/170003_ishikawa_covid19_counter.csv'
   },
   {
     name: 'news',
     url:
-      'http://web.check-data.work/covid/news.csv'
+      'https://web.check-data.work/covid/news.csv'
   }
 ]
 
