@@ -34,7 +34,7 @@ const openDataSource = [
   {
     name: 'call_center',
     url:
-      'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_call_center.csv'
+      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_call_center.csv'
   },
   // {
   //   name: 'discharge',
@@ -44,12 +44,27 @@ const openDataSource = [
   {
     name: 'patients',
     url:
-      'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_patients.csv'
+      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_patients.csv'
   },
   {
     name: 'test_count',
     url:
-      'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_test_count.csv'
+      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_test_count.csv'
+  },
+  {
+    name: 'city_patients',
+    url:
+      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_city_town_patients.csv'
+  },
+  {
+    name: 'general_consultation',
+    url:
+      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_counter.csv'
+  },
+  {
+    name: 'news',
+    url:
+      'http://localhost/ishikawa_csv_to_json-master/csv/news.csv'
   }
 ]
 
@@ -79,10 +94,13 @@ const files = {
   // fukuiShimbun: 'fukuishimbun.json', // 福井新聞のニュース
   contacts: 'contacts.json', // コールセンター相談件数
   hospitalBeds: 'hospital_beds.json', // 感染症病床使用率
-  inspectionPersons: 'inspection_persons.json', // 検査実施人数
+  inspectionPersons: '170003_ishikawa_covid19_test_count.json', // 検査実施人数
   inspectionSummary: 'inspection_summary.json', // 検査陽性者の状況
   patientsSummary: 'patients_summary.json', // 陽性患者数
-  patients: 'patients.json' // 陽性患者の属性
+  patients: '170003_ishikawa_covid19_patients.json', // 陽性患者の属性
+  cityPatients: '170003_ishikawa_covid19_city_town_patients.json', // 市区町村別患者数
+  generalConsultation: 'general_consultation.json', // 一般相談件数
+  news: 'news.json' // 一般相談件数
 }
 
 const main = async () => {
@@ -113,6 +131,9 @@ const main = async () => {
   const inspectionSummaryJson = Object.assign({}, jsonObjectBase)
   const patientsJson = Object.assign({}, jsonObjectBase)
   const patientsSummaryJson = Object.assign({}, jsonObjectBase)
+  const cityPatientsJson = Object.assign({}, jsonObjectBase)
+  const generalConsultationJson = Object.assign({}, jsonObjectBase)
+  const newsJson = Object.assign({}, jsonObjectBase)
   // LINQの設定
   const linq = Enumerable.from(openDataSource)
   // 各JSONの処理
@@ -134,7 +155,15 @@ const main = async () => {
     linq.where(x => x.name === 'patients').first().json,
     patientsSummaryJson
   )
-
+  cityPatients(
+    linq.where(x => x.name === 'city_patients').first().json,
+    cityPatientsJson
+  )
+  generalConsultation(
+    linq.where(x => x.name === 'general_consultation').first().json, 
+    generalConsultationJson
+  )
+  news(linq.where(x => x.name === 'news').first().json, newsJson)
   // 書き出し
   // writeFile(breakingNewsJson, files.breakingNews)
   // writeFile(fukuiNewsJson, files.fukuiNews)
@@ -145,6 +174,9 @@ const main = async () => {
   writeFile(inspectionSummaryJson, files.inspectionSummary)
   writeFile(patientsJson, files.patients)
   writeFile(patientsSummaryJson, files.patientsSummary)
+  writeFile(cityPatientsJson, files.cityPatients)
+  writeFile(generalConsultationJson, files.generalConsultation)
+  writeFile(newsJson, files.news)
 }
 
 /**
@@ -323,27 +355,20 @@ function inspectionSummary(json, jsonObject) {
 function patients(json, jsonObject) {
   jsonObject.data = []
   Enumerable.from(json).forEach(row => {
-    const publicationDay = new Date(row.公表_年月日)
-    const publicationDate = dateFormat.format(publicationDay, 'yyyy-MM-dd')
-    const publicationDateString = `${publicationDate}T00:00:00.000+09:00`
-
-    const developmentDay = new Date(row.発症_年月日)
-    const developmentDate = dateFormat.format(developmentDay, 'yyyy-MM-dd')
-    const developmentDateString =
-      row.発症_年月日 !== '' ? `${developmentDate}T00:00:00.000+09:00` : ''
+    // const publicationDay = new Date(row.公表_年月日)
+    // const publicationDate = dateFormat.format(publicationDay, 'yyyy-MM-dd')
+    // const publicationDateString = `${publicationDate}T00:00:00.000+09:00`
 
     const newObj = {
-      公表日: publicationDateString,
-      発症日: developmentDateString,
-      居住地: row['患者_居住地'],
-      年代: row['患者_年代'],
-      性別: row['患者_性別'],
-      職業: row['患者_職業'],
-      状態: row['患者_状態'],
-      症状: row['患者_症状'],
-      渡航歴: row['患者_渡航歴の有無フラグ'],
-      退院: row['患者_退院済フラグ'],
-      備考: row['備考']
+      No         : row['No'],
+      全国地方公共団体コード : row['全国地方公共団体コード'],
+      都道府県名  : row['都道府県名'],
+      市区町村名  : row['市区町村名'],
+      公表_年月日 : row['公表_年月日'],
+      患者_居住地 : row['患者_居住地'],
+      患者_年代   : row['患者_年代'],
+      患者_性別   : row['患者_性別']
+
     }
     jsonObject.data.push(newObj)
   })
@@ -377,6 +402,80 @@ function patientsSummary(json, jsonObject) {
     jsonObject.data.push(newObj)
   }
 }
+
+/**
+ * 日毎の患者数をJSONにします
+ * @param {Object} json 元の情報があるJSONオブジェクト
+ * @param {Object} jsonObject 書き出すJSONオブジェクト
+ */
+function cityPatients(json, jsonObject) {
+  jsonObject.data = []
+  detailObj = {}
+  detailObj.data = []
+  detailObj.summary = []
+  let x1 = 0, x2 = 0 ,x3 = 0, x4 = 0;
+  Enumerable.from(json).forEach(row => {
+    const newObj = {
+      地区ID  : row['地区ID'],
+      居住地  : row['居住地'],
+      感染者  : row['感染者'],
+      退院    : row['退院'],
+      死亡    : row['死亡'],
+      治療中  :row['治療中']
+    }
+    x1 += parseInt(row['感染者'])
+    x2 += parseInt(row['退院'])
+    x3 += parseInt(row['死亡'])
+    x4 += parseInt(row['治療中'])
+
+    detailObj.data.push(newObj)
+  })
+
+  detailObj.summary.push(
+    {attr  : "感染者", value : x1 },
+    {attr  : "退院", value : x2 },
+    {attr  : "死亡", value : x3 },
+    {attr  : "治療中", value : x4 }
+  )
+  jsonObject.data.push(detailObj)
+
+}
+
+/**
+ * 一般相談件数をJSONにします
+ * @param {Object} json 元の情報があるJSONオブジェクト
+ * @param {Object} jsonObject 書き出すJSONオブジェクト
+ */
+function generalConsultation(json, jsonObject) {
+  jsonObject.data = Enumerable.from(json)
+    .select(x => {
+      const date = new Date(x.受付_年月日)
+      const formatDate = dateFormat.format(date, 'yyyy-MM-dd')
+      return {
+        日付: `${formatDate}T00:00:00.000+09:00`,
+        小計: parseInt(x.相談件数)
+      }
+    })
+    .toArray()
+}
+
+/**
+ * お知らせをJSONにします
+ * @param {Object} json 元の情報があるJSONオブジェクト
+ * @param {Object} jsonObject 書き出すJSONオブジェクト
+ */
+function news(json, jsonObject) {
+  jsonObject.newsItems = []
+  Enumerable.from(json).forEach(row => {
+    const newObj = {
+      date  : row['掲載日'],
+      url   : row['URL'],
+      text  : row['タイトル']
+    }
+    jsonObject.newsItems.push(newObj)
+  })
+}
+
 
 const dateFormat = {
   _fmt: {
