@@ -34,37 +34,32 @@ const openDataSource = [
   {
     name: 'call_center',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_call_center.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_call_center.csv'
   },
-  // {
-  //   name: 'discharge',
-  //   url:
-  //     'https://www.pref.fukui.lg.jp/doc/toukei-jouhou/covid-19_d/fil/covid19_discharge.csv'
-  // },
   {
     name: 'patients',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_patients.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_patients.csv'
   },
   {
     name: 'test_count',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_test_count.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_test_count.csv'
   },
   {
     name: 'city_patients',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_city_town_patients.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_city_town_patients.csv'
   },
   {
     name: 'general_consultation',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/170003_ishikawa_covid19_counter.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_counter.csv'
   },
   {
     name: 'news',
     url:
-      'http://localhost/ishikawa_csv_to_json-master/csv/news.csv'
+      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/news.csv'
   }
 ]
 
