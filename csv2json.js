@@ -34,32 +34,32 @@ const openDataSource = [
   {
     name: 'call_center',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_call_center.csv'
+      'http://web.check-data.work/covid/170003_ishikawa_covid19_call_center.csv'
   },
   {
     name: 'patients',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_patients.csv'
+      'http://web.check-data.work/covid/170003_ishikawa_covid19_patients.csv'
   },
   {
     name: 'test_count',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_test_count.csv'
+      'http://web.check-data.work/covid/170003_ishikawa_covid19_test_count.csv'
   },
   {
     name: 'city_patients',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_city_town_patients.csv'
+      'http://web.check-data.work/covid/170003_ishikawa_covid19_city_town_patients.csv'
   },
   {
     name: 'general_consultation',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/170003_ishikawa_covid19_counter.csv'
+      'http://web.check-data.work/covid/170003_ishikawa_covid19_counter.csv'
   },
   {
     name: 'news',
     url:
-      'https://raw.githubusercontent.com/kulvon/ishikawa_csv_to_json/master/csv/news.csv'
+      'http://web.check-data.work/covid/news.csv'
   }
 ]
 
