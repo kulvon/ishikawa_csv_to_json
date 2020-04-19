@@ -89,7 +89,6 @@ const files = {
   // fukuiShimbun: 'fukuishimbun.json', // 福井新聞のニュース
   contacts: 'contacts.json', // コールセンター相談件数
   inspectionPersons: '170003_ishikawa_covid19_test_count.json', // 検査実施人数
-  inspectionSummary: 'inspection_summary.json', // 検査陽性者の状況
   patientsSummary: 'patients_summary.json', // 陽性患者数
   patients: '170003_ishikawa_covid19_patients.json', // 陽性患者の属性
   cityPatients: '170003_ishikawa_covid19_city_town_patients.json', // 市区町村別患者数
@@ -121,7 +120,6 @@ const main = async () => {
   // 各JSONを作成
   const contactsJson = Object.assign({}, jsonObjectBase)
   const inspectionPersonsJson = Object.assign({}, jsonObjectBase)
-  const inspectionSummaryJson = Object.assign({}, jsonObjectBase)
   const patientsJson = Object.assign({}, jsonObjectBase)
   const patientsSummaryJson = Object.assign({}, jsonObjectBase)
   const cityPatientsJson = Object.assign({}, jsonObjectBase)
@@ -134,10 +132,6 @@ const main = async () => {
   inspectionPersons(
     linq.where(x => x.name === 'test_count').first().json,
     inspectionPersonsJson
-  )
-  inspectionSummary(
-    linq.where(x => x.name === 'patients').first().json,
-    inspectionSummaryJson
   )
   patients(linq.where(x => x.name === 'patients').first().json, patientsJson)
   patientsSummary(
@@ -159,7 +153,6 @@ const main = async () => {
   // writeFile(japanNewsJson, files.japanNews)
   writeFile(contactsJson, files.contacts)
   writeFile(inspectionPersonsJson, files.inspectionPersons)
-  writeFile(inspectionSummaryJson, files.inspectionSummary)
   writeFile(patientsJson, files.patients)
   writeFile(patientsSummaryJson, files.patientsSummary)
   writeFile(cityPatientsJson, files.cityPatients)
@@ -254,67 +247,6 @@ function inspectionPersons(json, jsonObject) {
     }
     jsonObject.data.push(dataItem)
   })
-}
-
-/**
- * 陽性患者の属性をJSONにします
- * @param {Object} json 元の情報があるJSONオブジェクト
- * @param {Object} jsonObject 書き出すJSONオブジェクト
- */
-function inspectionSummary(json, jsonObject) {
-  const patient = Enumerable.from(json)
-  const hospitalized = x =>
-    x.患者_状態 !== '死亡' && parseInt(x.患者_退院済フラグ) !== 1
-  const mildOrModerate = x =>
-    x.患者_状態 === '軽症' || x.患者_状態 === '中等症' || x.患者_状態 === ''
-  const severeOrSerious = x => x.患者_状態 === '重症' || x.患者_状態 === '重篤'
-  const dead = x => x.患者_状態 === '死亡'
-  // const discharge = x =>
-  //   parseInt(x.患者_退院済フラグ) === 1 && x.患者_状態 !== '死亡'
-  jsonObject.children = [
-    {
-      attr: '陽性患者数',
-      value: patient.count(),
-      children: [
-        {
-          attr: '入院中',
-          value: patient.where(hospitalized).count(),
-          children: [
-            {
-              attr: '軽症・中等症',
-              value: patient
-                .where(hospitalized)
-                .where(mildOrModerate)
-                .count()
-            },
-            {
-              attr: '重症',
-              value: patient
-                .where(hospitalized)
-                .where(severeOrSerious)
-                .count()
-            }
-          ]
-        },
-        {
-          attr: '死亡',
-          value: patient.where(dead).count()
-        },
-        // {
-        //   attr: '退院',
-        //   value: patient.where(discharge).count()
-        // },
-        {
-          attr: '自宅療養',
-          value: '不明'
-        },
-        {
-          attr: '宿泊施設等',
-          value: '不明'
-        }
-      ]
-    }
-  ]
 }
 
 /**
