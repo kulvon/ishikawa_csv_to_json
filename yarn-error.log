@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/sato/.nodebrew/node/v12.16.2/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js build
+  /Users/sato/.nodebrew/node/v12.16.2/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js dev-no-axe
 
 PATH: 
   /usr/local/var/pyenv/shims:/Users/sato/.rbenv/shims:/Users/sato/.nodebrew/current/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/var/pyenv/shims:/Users/sato/.rbenv/shims:/Users/sato/.nodebrew/current/bin:/usr/local/sbin
@@ -265,7 +265,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
 
 Trace: 
-  Error: Command "build" not found.
+  Error: Command "dev-no-axe" not found.
       at new MessageError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:186:110)
       at /usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:87307:17
       at Generator.next (<anonymous>)

@@ -59,7 +59,7 @@ const openDataSource = [
   {
     name: 'news',
     url:
-      'https://web.check-data.work/covid/news.csv'
+      'https://www.pref.ishikawa.lg.jp/kenmin/covid19/documents/news.csv'
   }
 ]
 
