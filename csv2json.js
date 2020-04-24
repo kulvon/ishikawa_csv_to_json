@@ -1,5 +1,5 @@
 /**
- * Fukui covid-19 open data getting script
+ * Thanks Fukui covid-19 open data getting script
  * include feature downloading news spreadsheet
  * Copyright © HyodaKazuaki
  */
@@ -16,16 +16,7 @@ const cheerio = require('cheerio')
  * Shift-JISフラグ
  * falseの場合はUTF-8として処理
  */
-const ISSHIFTJIS = false
-
-/**
- * 病床数
- */
-// if (isNaN(parseInt(process.env.HOSPITAL_BEDS))) {
-//   throw new RangeError('env HOSPITAL_BEDS is NaN')
-// }
-// const HospitalBedNum = process.env.HOSPITAL_BEDS
-const HospitalBedNum = 100
+const ISSHIFTJIS = true
 
 /**
  * オープンデータ取得先
@@ -34,27 +25,27 @@ const openDataSource = [
   {
     name: 'call_center',
     url:
-      'https://web.check-data.work/covid/170003_ishikawa_covid19_call_center.csv'
+      'https://www.pref.ishikawa.lg.jp/kansen/documents/170003_ishikawa_covid19_call_center.csv'
   },
   {
     name: 'patients',
     url:
-      'https://web.check-data.work/covid/170003_ishikawa_covid19_patients.csv'
+      'https://www.pref.ishikawa.lg.jp/kansen/documents/170003_ishikawa_covid19_patients.csv'
   },
   {
     name: 'test_count',
     url:
-      'https://web.check-data.work/covid/170003_ishikawa_covid19_test_count.csv'
+      'https://www.pref.ishikawa.lg.jp/kansen/documents/170003_ishikawa_covid19_test_count.csv'
   },
   {
     name: 'city_patients',
     url:
-      'https://web.check-data.work/covid/170003_ishikawa_covid19_city_town_patients.csv'
+      'https://www.pref.ishikawa.lg.jp/kansen/documents/170003_ishikawa_covid19_city_town_patients.csv'
   },
   {
     name: 'general_consultation',
     url:
-      'https://web.check-data.work/covid/170003_ishikawa_covid19_counter.csv'
+      'https://www.pref.ishikawa.lg.jp/kansen/documents/170003_ishikawa_covid19_counter.csv'
   },
   {
     name: 'news',
@@ -64,29 +55,14 @@ const openDataSource = [
 ]
 
 /**
- * ニュースデータ取得先
- */
-// const newsURL =
-//   'https://script.googleusercontent.com/macros/echo?user_content_key=PYdskn-DTyGWV-opQBIPMai2hf_fFAN4QEmRbzTslY_Wk87YfJO9j9H3ity-FUaFPy1pksmbx2n_xtdxmYsKNAQ8OsCGB2Tbm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnIEfRmCr39HTGQrTUSiWR0O7CYjXcSKXdkQgDZghk6tW42sA2IpyDGOwsQ9LRFT_DlHTmz_2mixm&lib=MA39SnUYxoNd8lbNHqVdiBtdTRtZCTy75'
-
-/**
- * 福井新聞RSS取得先
- */
-// const fukuiShimbunURL = 'https://www.fukuishimbun.co.jp/list/feed/rss'
-
-/**
  * jsonファイルの階層
  */
-const dir = 'data/'
+const dir = './data/'
 
 /**
  * jsonのファイル名
  */
 const files = {
-  // breakingNews: 'breakingNews.json', // 速報
-  // fukuiNews: 'fukui_news.json', // 県内のお知らせ
-  // japanNews: 'japan_news.json', // 国内のお知らせ
-  // fukuiShimbun: 'fukuishimbun.json', // 福井新聞のニュース
   contacts: 'contacts.json', // コールセンター相談件数
   inspectionPersons: '170003_ishikawa_covid19_test_count.json', // 検査実施人数
   patientsSummary: 'patients_summary.json', // 陽性患者数
@@ -103,20 +79,15 @@ const main = async () => {
     const json = await csv2json().fromString(csv)
     source.json = json
   }
-  // ニュースデータ取得
-  // const newsJson = (await axios.get(newsURL)).data
-  // const breakingNewsJson = newsJson.breaking_news
-  // const fukuiNewsJson = newsJson.fukui_news
-  // const japanNewsJson = newsJson.japan_news
 
   // オープンデータ
   const today = new Date()
   today.setHours(today.getHours() + 9)
-  
+
   const jsonObjectBase = {
     date: dateFormat.format(today, 'yyyy/MM/dd hh:mm')
   }
-  
+
   // 各JSONを作成
   const contactsJson = Object.assign({}, jsonObjectBase)
   const inspectionPersonsJson = Object.assign({}, jsonObjectBase)
@@ -148,9 +119,6 @@ const main = async () => {
   )
   news(linq.where(x => x.name === 'news').first().json, newsJson)
   // 書き出し
-  // writeFile(breakingNewsJson, files.breakingNews)
-  // writeFile(fukuiNewsJson, files.fukuiNews)
-  // writeFile(japanNewsJson, files.japanNews)
   writeFile(contactsJson, files.contacts)
   writeFile(inspectionPersonsJson, files.inspectionPersons)
   writeFile(patientsJson, files.patients)
@@ -286,6 +254,9 @@ function patientsSummary(json, jsonObject) {
   // 最初の日
   const initDay = new Date('2020-02-16')
   const today = new Date()
+  if(today.getHours() + 9 < 21) {
+    today.setDate(today.getDate() - 1)
+  }
   const diffDay = parseInt((today - initDay) / (1000 * 60 * 60 * 24)) // 日の差分
   for (let i = 0; i <= diffDay; i++) {
     const targetDay = new Date(initDay.toDateString())
@@ -424,51 +395,10 @@ const main2 = () => {
     return false
   }
 
-  // const getFukuiShimbun = () => {
-  //   const moment = require('moment-timezone')
-  //   const xml2js = require('xml2js')
-  //   moment.tz.setDefault('Asia/Tokyo')
-
-  //   return new Promise(async (resolve, reject) => {
-  //     try {
-  //       const res = await axios.get(fukuiShimbunURL)
-  //       const xml = res.data
-  //       const json = {
-  //         timestamp: moment().unix(),
-  //         info: null
-  //       }
-  //       xml2js.parseString(xml, (_, xmlres) => {
-  //         json.info = xmlres.rss.channel[0].item.map(i => {
-  //           return {
-  //             title: i.title[0],
-  //             link: i.link[0],
-  //             published_at: moment(i.pubDate[0]).format('YYYY/MM/DD HH:mm')
-  //           }
-  //         })
-  //       })
-  //       resolve(json)
-  //     } catch (error) {
-  //       reject(error)
-  //     }
-  //   })
-  // }
-
   async function asyncFilter(array, asyncCallback) {
     const bits = await Promise.all(array.map(asyncCallback))
     return array.filter((_, i) => bits[i])
   }
-
-  // const storeFukuiShimbun = async () => {
-  //   try {
-  //     // const json = await getFukuiShimbun()
-  //     json.info = await asyncFilter(json.info, el => isCovidArticle(el))
-  //     writeFile(json, files.fukuiShimbun)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
-
-  // storeFukuiShimbun()
 }
 
 main2()
