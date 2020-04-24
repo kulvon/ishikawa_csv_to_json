@@ -1,20 +1,14 @@
 {
-    "date": "2020/04/23 20:45",
+    "date": "2020/04/24 18:05",
     "newsItems": [
         {
-            "date": "2020/4/23",
-            "url": "https://www.pref.ishikawa.lg.jp/kansen/kaiken.html",
-            "text": "健康福祉部長記者会見を更新しました"
+            "url": "https://www.pref.ishikawa.lg.jp/kansen/kaiken.html"
         },
         {
-            "date": "2020/4/22",
-            "url": "https://www.pref.ishikawa.lg.jp/kansen/kaiken.html",
-            "text": "健康福祉部長記者会見を更新しました"
+            "url": "https://www.pref.ishikawa.lg.jp/kansen/kaiken.html"
         },
         {
-            "date": "2020/4/22",
-            "url": "https://www.pref.ishikawa.lg.jp/kenmin/covid19/documents/contacts.pdf",
-            "text": "相談窓口一覧を更新しました"
+            "url": "https://www.pref.ishikawa.lg.jp/kenmin/covid19/documents/contacts.pdf"
         }
     ]
 }
