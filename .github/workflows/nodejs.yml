@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   schedule:
-    - cron: "*/20 0-15,21-23 * * *"
+    - cron: "*/30 0-15,21-23 * * *"
 
 jobs:
   build-run-deploy:
@@ -32,7 +32,8 @@ jobs:
             --header "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
               --header "Accept: application/vnd.github.everest-preview+json" \
               --header "Content-Type: application/json" \
-              https://api.github.com/repos/kulvon/covid-test/dispatches --data '{"event_type": "build_application"}'
+              https://api.github.com/repos/kulvon/covid-test/dispatches --data '{"event_type": "build_application"}' \
+            || true
 
       - name: Push changes
         uses: ad-m/github-push-action@master
